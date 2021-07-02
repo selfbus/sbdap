@@ -24,7 +24,7 @@ export V
 
 BUILD_DIR      ?= ./build
 
-all: DAP42.bin DAP42DC.bin KITCHEN42.bin \
+all: DAP42.bin SBDAP.bin DAP42DC.bin KITCHEN42.bin \
      DAP103.bin DAP103-DFU.bin \
      DAP103-BLUEPILL.bin DAP103-BLUEPILL-DFU.bin \
      DAP103-NUCLEO-STBOOT.bin \
@@ -43,6 +43,12 @@ DAP42.bin: | $(BUILD_DIR)
 	@printf "  BUILD $(@)\n"
 	$(Q)$(MAKE) TARGET=STM32F042 -C src/ clean
 	$(Q)$(MAKE) TARGET=STM32F042 -C src/
+	$(Q)cp src/DAP42.bin $(BUILD_DIR)/$(@)
+
+SBDAP.bin: | $(BUILD_DIR)
+	@printf "  BUILD $(@)\n"
+	$(Q)$(MAKE) TARGET=SBDAP -C src/ clean
+	$(Q)$(MAKE) TARGET=SBDAP -C src/
 	$(Q)cp src/DAP42.bin $(BUILD_DIR)/$(@)
 
 DAP42DC.bin: | $(BUILD_DIR)
