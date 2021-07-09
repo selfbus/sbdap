@@ -81,7 +81,7 @@ int main(void) {
     tick_setup(1000);
     gpio_setup();
     led_num(0);
-
+        
     if (CDC_AVAILABLE) {
         console_setup(DEFAULT_BAUDRATE);
     }
@@ -97,8 +97,6 @@ int main(void) {
         retarget(STDERR_FILENO, CONSOLE_USART);
     }
     
-    led_num(1);
-
     {
         char serial[USB_SERIAL_NUM_LENGTH+1];
         desig_get_unique_id_as_string(serial, USB_SERIAL_NUM_LENGTH+1);
@@ -126,6 +124,16 @@ int main(void) {
     }
 
     tick_start();
+
+    #if defined(SBDAP)
+        led_num(1);
+        wait_ms(200);
+        led_num(5);
+        wait_ms(200);
+        led_num(7);
+        wait_ms(500);
+        led_num(0);
+    #endif
 
     /* Enable the watchdog to enable DFU recovery from bad firmware images */
     iwdg_set_period_ms(1000);
