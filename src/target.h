@@ -24,6 +24,5 @@ extern void clock_setup(void);
 extern void gpio_setup(void);
 extern void target_console_init(void);
 extern void led_num(uint8_t value);
-extern void led_bit(uint8_t position, bool state);
 
 #endif

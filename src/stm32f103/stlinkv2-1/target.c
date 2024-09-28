@@ -89,21 +89,6 @@ void target_console_init(void){
                   GPIO_CNF_INPUT_FLOAT, CONSOLE_USART_GPIO_RX);
 }
 
-void led_bit(uint8_t position, bool state) {
-    uint32_t gpio = 0xFFFFFFFFU;
-    if (position == 0) {
-        gpio = GPIO9;
-    }
-
-    if (gpio != 0xFFFFFFFFU) {
-        if (state ^ LED_OPEN_DRAIN) {
-            gpio_set(GPIOA, gpio);
-        } else {
-            gpio_clear(GPIOA, gpio);
-        }
-    }
-}
-
 void led_num(uint8_t value) {
     if ((value & 0x1) ^ LED_OPEN_DRAIN) {
         gpio_set(GPIOA, GPIO9);

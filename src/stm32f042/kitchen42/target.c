@@ -76,29 +76,6 @@ void target_console_init(void) {
     gpio_set_af(CONSOLE_USART_GPIO_PORT, CONSOLE_USART_GPIO_AF, CONSOLE_USART_GPIO_PINS);
 }
 
-void led_bit(uint8_t position, bool state) {
-    uint32_t gpio = 0xFFFFFFFFU;
-    uint32_t port = 0xFFFFFFFFU;
-    if (position == 0) {
-        port = GPIOA;
-        gpio = GPIO4;
-    } else if (position == 1) {
-        port = GPIOA;
-        gpio = GPIO5;
-    } else if (position == 2) {
-        port = GPIOC;
-        gpio = GPIO13;
-    }
-
-    if (gpio != 0xFFFFFFFFU && port != 0xFFFFFFFFU) {
-        if (state ^ LED_OPEN_DRAIN) {
-            gpio_set(port, gpio);
-        } else {
-            gpio_clear(port, gpio);
-        }
-    }
-}
-
 void led_num(uint8_t value) {
     if (((value & 0x4) != 0) ^ LED_OPEN_DRAIN) {
         gpio_set(GPIOC, GPIO13);
