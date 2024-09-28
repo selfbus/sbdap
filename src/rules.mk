@@ -88,8 +88,8 @@ STFLASH         = $(shell which st-flash)
 ####################################################################
 # Source files
 
-INCLUDE_DIR	= $(OPENCM3_DIR)/include
-LIB_DIR		= $(OPENCM3_DIR)/lib
+INCLUDE_DIR = $(OPENCM3_DIR)/include
+LIB_DIR     = $(OPENCM3_DIR)/lib
 
 ####################################################################
 # C flags
@@ -122,7 +122,7 @@ LDFLAGS    += -T$(LDSCRIPT)
 LDFLAGS    += -Wl,-Map=$(*).map
 LDFLAGS    += -Wl,--gc-sections
 ifeq ($(V),99)
-LDFLAGS    += -Wl,--print-gc-sections
+	LDFLAGS+= -Wl,--print-gc-sections
 endif
 
 ####################################################################
@@ -151,9 +151,9 @@ images: $(BINARY).images
 flash: $(BINARY).flash
 
 $(LDSCRIPT):
-    ifeq (,$(wildcard $(LDSCRIPT)))
-        $(error Unable to find specified linker script: $(LDSCRIPT))
-    endif
+	ifeq (,$(wildcard $(LDSCRIPT)))
+		$(error Unable to find specified linker script: $(LDSCRIPT))
+	endif
 
 $(OPENCM3_DIR)/Makefile:
 	$(Q)git submodule update --init $(OPENCM3_DIR)

@@ -174,11 +174,11 @@ static __inline void     PIN_nTRST_OUT  (uint32_t bit) { (void)bit; }
   other functionality not applicable to this application
 */
 static __inline uint32_t PIN_SWCLK_TCK_IN  (void) {
-	return (GPIO_IDR(SWCLK_GPIO_PORT) & SWCLK_GPIO_PIN) ? 0x1 : 0x0;
+    return (GPIO_IDR(SWCLK_GPIO_PORT) & SWCLK_GPIO_PIN) ? 0x1 : 0x0;
 }
 
 static __inline uint32_t PIN_nRESET_IN  (void) {
-	return (GPIO_IDR(nRESET_GPIO_PORT) & nRESET_GPIO_PIN) ? 0x1 : 0x0;
+    return (GPIO_IDR(nRESET_GPIO_PORT) & nRESET_GPIO_PIN) ? 0x1 : 0x0;
 }
 
 static __inline void PIN_nRESET_OUT (uint32_t bit) {
