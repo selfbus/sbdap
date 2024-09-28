@@ -51,10 +51,10 @@ int _write(int file, char *ptr, int len) {
         usart = usart_stderr;
     }
 
-    if (usart == CONSOLE_USART) {
+    if (usart == CONSOLE_USART && CDC_AVAILABLE) {
         sent = console_send_buffered((uint8_t*)ptr, (size_t)len);
         return sent;
-    } else if (usart == VIRTUAL_USART) {
+    } else if (usart == VIRTUAL_USART && VCDC_AVAILABLE) {
         sent = vcdc_send_buffered((uint8_t*)ptr, (size_t)len);
         return sent;
     }
