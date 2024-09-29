@@ -98,6 +98,7 @@ CFLAGS      += -Os -g -std=gnu11
 CFLAGS      += -Wextra -Wshadow -Wimplicit-function-declaration
 CFLAGS      += -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes
 CFLAGS      += -fno-common -ffunction-sections -fdata-sections
+CFLAGS      += --specs=nano.specs
 
 ####################################################################
 # C++ flags
@@ -105,6 +106,7 @@ CFLAGS      += -fno-common -ffunction-sections -fdata-sections
 CXXFLAGS    += -Os -g
 CXXFLAGS    += -Wextra -Wshadow -Wredundant-decls  -Weffc++
 CXXFLAGS    += -fno-common -ffunction-sections -fdata-sections
+CCCFLAGS    += --specs=nano.specs
 
 ####################################################################
 # C & C++ preprocessor common flags
@@ -121,6 +123,7 @@ LDFLAGS    += -L$(LIB_DIR)
 LDFLAGS    += -T$(LDSCRIPT)
 LDFLAGS    += -Wl,-Map=$(*).map
 LDFLAGS    += -Wl,--gc-sections
+LDFLAGS    += --specs=nano.specs
 ifeq ($(V),99)
 	LDFLAGS+= -Wl,--print-gc-sections
 endif
