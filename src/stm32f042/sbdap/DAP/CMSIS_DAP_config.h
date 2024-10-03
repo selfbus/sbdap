@@ -130,11 +130,12 @@ Provides definitions about:
 #define SWCLK_GPIO_PIN          GPIO6
 #define SWDIO_GPIO_PORT         GPIOA
 #define SWDIO_GPIO_PIN          GPIO5
-#define SWDIR_GPIO_PORT         GPIOF       // SWDIO buffer direction control
-#define SWDIR_GPIO_PIN          GPIO0
 #define nRESET_GPIO_PORT        GPIOB
 #define nRESET_GPIO_PIN         GPIO1
+#define nRESET_ENABLE_PULLUP    1
 
+#define SWDIR_GPIO_PORT         GPIOF       // SWDIO buffer direction control
+#define SWDIR_GPIO_PIN          GPIO0
 #define CTL_GPIO_PORT           GPIOF       // NXP LPC bootloader invoke
 #define CTL_GPIO_PIN            GPIO1
 

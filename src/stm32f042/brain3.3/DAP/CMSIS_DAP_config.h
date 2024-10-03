@@ -132,6 +132,7 @@ Provides definitions about:
 #define SWDIO_GPIO_PIN          GPIO0
 #define nRESET_GPIO_PORT        GPIOA
 #define nRESET_GPIO_PIN         GPIO4
+#define nRESET_ENABLE_PULLUP    0
 
 #define LED_CON_GPIO_PORT       GPIOA
 #define LED_CON_GPIO_PIN        GPIO5
