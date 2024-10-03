@@ -58,5 +58,6 @@ typedef uint16_t usart_word_t;
 #define USART_RDR(usart_base) USART_DR(usart_base)
 
 #define LED_OPEN_DRAIN         1
+#define LED_SELFTEST()         {}
 
 #endif

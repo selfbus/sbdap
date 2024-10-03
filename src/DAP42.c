@@ -125,15 +125,7 @@ int main(void) {
 
     tick_start();
 
-    #if defined(SBDAP)
-        led_num(1);
-        wait_ms(200);
-        led_num(5);
-        wait_ms(200);
-        led_num(7);
-        wait_ms(500);
-        led_num(0);
-    #endif
+    LED_SELFTEST();
 
     /* Enable the watchdog to enable DFU recovery from bad firmware images */
     iwdg_set_period_ms(1000);

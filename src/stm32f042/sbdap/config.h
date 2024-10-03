@@ -58,6 +58,7 @@
 typedef uint8_t usart_word_t;
 
 #define LED_OPEN_DRAIN 1
+#define LED_SELFTEST()         { led_num(1); wait_ms(200); led_num(5); wait_ms(200); led_num(7); wait_ms(500); led_num(0); }
 
 #define SBDAP 1
 
