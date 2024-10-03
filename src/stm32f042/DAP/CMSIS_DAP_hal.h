@@ -59,12 +59,18 @@ see: https://arm-software.github.io/CMSIS_5/latest/DAP/html/group__DAP__Config__
 Setup SWD I/O pins: SWCLK, SWDIO, and SWDIR.
 Configures the DAP Hardware I/O pins for Serial Wire Debug (SWD) mode:
 
-    SWCLK, SWDIO, SWDIR to output mode and set to default high level.
+    SWCLK, SWDIO to output mode and set to default high level.
 */
 static __inline void PORT_SWD_SETUP (void)
 {
     GPIO_BSRR(SWCLK_GPIO_PORT) = SWCLK_GPIO_PIN;
     GPIO_BSRR(SWDIO_GPIO_PORT) = SWDIO_GPIO_PIN;
+
+    gpio_set_output_options(SWCLK_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_HIGH, SWCLK_GPIO_PIN);
+    gpio_set_output_options(SWDIO_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_HIGH, SWDIO_GPIO_PIN);
+
+    gpio_mode_setup(SWCLK_GPIO_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SWCLK_GPIO_PIN);
+    gpio_mode_setup(SWDIO_GPIO_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SWDIO_GPIO_PIN);
 
 #if defined(SWDIR_GPIO_PORT) && defined(SWDIR_GPIO_PIN)
     // set SWDIO buffer to output mode
@@ -74,20 +80,6 @@ static __inline void PORT_SWD_SETUP (void)
 #if defined(CTL_GPIO_PORT) && defined(CTL_GPIO_PIN)
     // do not invoke NXP LPC bootloader
     GPIO_BSRR(CTL_GPIO_PORT) = CTL_GPIO_PIN;
-#endif
-
-    gpio_set_output_options(SWCLK_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_HIGH, SWCLK_GPIO_PIN);
-    gpio_set_output_options(SWDIO_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_HIGH, SWDIO_GPIO_PIN);
-
-#if defined(SWDIR_GPIO_PORT) && defined(SWDIR_GPIO_PIN)
-    gpio_set_output_options(SWDIR_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_HIGH, SWDIR_GPIO_PIN);
-#endif
-
-    gpio_mode_setup(SWCLK_GPIO_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SWCLK_GPIO_PIN);
-    gpio_mode_setup(SWDIO_GPIO_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SWDIO_GPIO_PIN);
-
-#if defined(SWDIR_GPIO_PORT) && defined(SWDIR_GPIO_PIN)
-    gpio_mode_setup(SWDIR_GPIO_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SWDIR_GPIO_PIN);
 #endif
 }
 
@@ -312,6 +304,13 @@ static __inline void DAP_SETUP (void) {
     GPIO_BSRR(nRESET_GPIO_PORT) = nRESET_GPIO_PIN;
     gpio_set_output_options(nRESET_GPIO_PORT, GPIO_OTYPE_OD, GPIO_OSPEED_LOW, nRESET_GPIO_PIN);
     gpio_mode_setup(nRESET_GPIO_PORT, GPIO_MODE_OUTPUT, nRESET_ENABLE_PULLUP ? GPIO_PUPD_PULLUP : GPIO_PUPD_NONE, nRESET_GPIO_PIN);
+#endif
+
+#if defined(SWDIR_GPIO_PORT) && defined(SWDIR_GPIO_PIN)
+    // set SWDIO buffer to input mode
+    GPIO_BRR(SWDIR_GPIO_PORT) = SWDIR_GPIO_PIN;
+    gpio_set_output_options(SWDIR_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_HIGH, SWDIR_GPIO_PIN);
+    gpio_mode_setup(SWDIR_GPIO_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SWDIR_GPIO_PIN);
 #endif
 
 #if defined(CTL_GPIO_PORT) && defined(CTL_GPIO_PIN)
