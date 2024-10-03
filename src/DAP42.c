@@ -96,7 +96,7 @@ int main(void) {
         retarget(STDOUT_FILENO, CONSOLE_USART);
         retarget(STDERR_FILENO, CONSOLE_USART);
     }
-    
+
     led_num(1);
 
     {
@@ -126,6 +126,8 @@ int main(void) {
     }
 
     tick_start();
+
+    LED_SELFTEST();
 
     /* Enable the watchdog to enable DFU recovery from bad firmware images */
     iwdg_set_period_ms(1000);

@@ -58,5 +58,6 @@
 typedef uint8_t usart_word_t;
 
 #define LED_OPEN_DRAIN         0
+#define LED_SELFTEST()         {}
 
 #endif

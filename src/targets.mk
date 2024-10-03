@@ -109,6 +109,12 @@ ifeq ($(TARGET),STLINKV2-1-STBOOT)
 	DEFS               += -DDFU_AVAILABLE=1
 	ARCH                = STM32F1
 endif
+ifeq ($(TARGET),SBDAP)
+	TARGET_COMMON_DIR  := ./stm32f042
+	TARGET_SPEC_DIR    := ./stm32f042/sbdap
+	LDSCRIPT           ?= ./stm32f042/stm32f042x6.ld
+	ARCH                = STM32F0
+endif
 ifndef ARCH
 $(error Unknown target $(TARGET))
 endif
