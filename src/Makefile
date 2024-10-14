@@ -23,6 +23,7 @@ TARGET         ?= STM32F042
 include targets.mk
 
 DFU_UTIL       ?= dfu-util
+DFU_SUFFIX     ?= dfu-suffix
 DFUSE_VID_PID  := 0483:df11
 DAP42_VID_PID  := 1209:da42
 DFU_VID_PID    ?= $(DFUSE_VID_PID)

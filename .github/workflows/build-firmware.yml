@@ -26,6 +26,9 @@ jobs:
         name: Download toolchain
         run: ./util/install-toolchain.sh
 
+      - name: Install dfu-util
+        run: sudo apt-get update && sudo apt-get install --yes dfu-util
+
       - name: Build Firmware
         run: make -k all
         env:
