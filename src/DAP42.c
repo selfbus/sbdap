@@ -71,6 +71,48 @@ static void on_dfu_request(void) {
     do_reset_to_dfu = true;
 }
 
+static inline void set_target_state(bool reset, bool enter_bootloader) {
+    /*
+     * For transitioning from true/true to false/false, clear CTL first to ensure
+     * the MCU does not enter the bootloader.
+     */
+    PIN_CTL_OUT(enter_bootloader);
+    PIN_nRESET_OUT(!reset);
+}
+
+static bool do_deferred_set_target_state = false;
+static uint32_t set_target_state_timer_start;
+static bool set_target_state_reset;
+static bool set_target_state_enter_bootloader;
+static void on_cdc_set_control_line_state(bool dtr, bool rts) {
+    /*
+     * At least Linux and Windows set true/true by default when an app opens
+     * the channel, so forwarding these values directly to set_target_state
+     * would cause the target MCU to reset right away, even when one simply wants
+     * to capture UART output without resetting the target. Therefore, this
+     * combination must be ignored here.
+     *
+     * When NXP Flash Magic wants to reset the target, it first sets true/true,
+     * followed by either true/false or false/true, followed by false/false.
+     * Thus, the condition dtr != rts indicates it's time to reset the target.
+     */
+    if (dtr != rts) {
+        /* Reset now */
+        set_target_state(true, true);
+
+        /* Defer setting the requested state */
+        do_deferred_set_target_state = true;
+        set_target_state_timer_start = get_ticks();
+        set_target_state_reset = dtr;
+        set_target_state_enter_bootloader = rts;
+    }
+    else if (!dtr) {
+        /* Parameters are false/false */
+        do_deferred_set_target_state = false;
+        set_target_state(false, false);
+    }
+}
+
 int main(void) {
     if (DFU_AVAILABLE) {
         DFU_maybe_jump_to_bootloader();
@@ -109,7 +151,10 @@ int main(void) {
     DAP_app_setup(usbd_dev, &on_dfu_request);
 
     if (CDC_AVAILABLE) {
-        cdc_uart_app_setup(usbd_dev, &on_usb_activity, &on_usb_activity);
+        cdc_uart_app_setup(usbd_dev,
+                           &on_cdc_set_control_line_state,
+                           &on_usb_activity,
+                           &on_usb_activity);
         cdc_uart_app_set_timeout(1);
     }
 
@@ -174,6 +219,12 @@ int main(void) {
             LED_ACTIVITY_OUT(1);
         } else {
             LED_ACTIVITY_OUT(0);
+        }
+
+        bool timer_elapsed = (get_ticks() - set_target_state_timer_start) >= 25;
+        if (do_deferred_set_target_state && timer_elapsed) {
+            do_deferred_set_target_state = false;
+            set_target_state(set_target_state_reset, set_target_state_enter_bootloader);
         }
     }
 

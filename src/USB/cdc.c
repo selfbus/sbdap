@@ -241,6 +241,7 @@ static struct usb_cdc_line_coding current_line_coding = {
 };
 
 void cdc_uart_app_reset(void);
+void cdc_uart_app_reset_buffer(void);
 
 static bool cdc_uart_set_line_coding(const struct usb_cdc_line_coding* line_coding) {
     uint32_t databits;
@@ -281,7 +282,7 @@ static bool cdc_uart_set_line_coding(const struct usb_cdc_line_coding* line_codi
     }
 
     // Reset the output packet buffer
-    cdc_uart_app_reset();
+    cdc_uart_app_reset_buffer();
 
     console_reconfigure(line_coding->dwDTERate, databits, stopbits, parity);
     memcpy(&current_line_coding, (const void*)line_coding, sizeof(current_line_coding));
@@ -313,6 +314,13 @@ static uint32_t packet_timestamp = 0;
 static bool need_zlp = false;
 
 void cdc_uart_app_reset(void) {
+    if (cdc_set_control_line_state_callback) {
+        cdc_set_control_line_state_callback(false, false);
+    }
+    cdc_uart_app_reset_buffer();
+}
+
+void cdc_uart_app_reset_buffer(void) {
     packet_len = 0;
     packet_timestamp = get_ticks();
     need_zlp = false;
@@ -320,6 +328,7 @@ void cdc_uart_app_reset(void) {
 }
 
 void cdc_uart_app_setup(usbd_device* usbd_dev,
+                   SetControlLineStateFunction cdc_set_control_line_state_cb,
                    GenericCallback cdc_tx_cb,
                    GenericCallback cdc_rx_cb) {
     cdc_uart_tx_callback = cdc_tx_cb;
@@ -327,7 +336,7 @@ void cdc_uart_app_setup(usbd_device* usbd_dev,
 
     cdc_setup(usbd_dev,
               &cdc_uart_on_host_tx,
-              NULL,
+              cdc_set_control_line_state_cb,
               &cdc_uart_set_line_coding, &cdc_uart_get_line_coding);
     cmp_usb_register_reset_callback(cdc_uart_app_reset);
 }

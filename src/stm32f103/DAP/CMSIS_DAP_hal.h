@@ -189,6 +189,10 @@ static __inline void PIN_nRESET_OUT (uint32_t bit) {
     }
 }
 
+static __inline void PIN_CTL_OUT (uint32_t bit) {
+    (void)bit;
+}
+
 static __inline void LED_CONNECTED_OUT (uint32_t bit) {
     if ((bit & 0x1) ^ LED_OPEN_DRAIN) {
         gpio_set(LED_CON_GPIO_PORT, LED_CON_GPIO_PIN);

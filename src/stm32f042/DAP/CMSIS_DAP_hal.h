@@ -255,6 +255,25 @@ static __inline void PIN_nRESET_OUT (uint32_t bit) {
 }
 
 /*
+CTL I/O pin: Set Output.
+Parameters
+    bit        target device enter bootloader pin status:
+        0: do not enter bootloader.
+        1: enter bootloader.
+*/
+static __inline void PIN_CTL_OUT (uint32_t bit) {
+#if defined(CTL_GPIO_PORT) && defined(CTL_GPIO_PIN)
+    if (bit & 0x1) {
+        GPIO_BRR(CTL_GPIO_PORT) = CTL_GPIO_PIN;
+    } else {
+        GPIO_BSRR(CTL_GPIO_PORT) = CTL_GPIO_PIN;
+    }
+#else
+    (void)bit;
+#endif
+}
+
+/*
 Debug Unit: Set status of Connected LED.
 Parameters
     bit	status of the Connect LED.
