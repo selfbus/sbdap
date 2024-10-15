@@ -172,7 +172,7 @@ locm3: $(LIB_DIR)/lib$(LIBNAME).a
 %.bin: %.elf
 	@#printf "  OBJCOPY $(*).bin\n"
 	$(Q)$(OBJCOPY) -Obinary $(*).elf $(*).bin
-	$(DFU_SUFFIX) -d $(DFU_VID_PID) --add $(*).bin
+	$(Q)$(DFU_SUFFIX) -d $(DFU_VID_PID) --add $(*).bin >/dev/null
 
 %.hex: %.elf
 	@#printf "  OBJCOPY $(*).hex\n"
