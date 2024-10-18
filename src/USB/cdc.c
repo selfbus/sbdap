@@ -150,7 +150,8 @@ cdc_control_class_request(usbd_device *usbd_dev,
 
             break;
         }
-        case USB_CDC_REQ_GET_LINE_CODING: {
+        case USB_CDC_REQ_GET_LINE_CODING:
+        case USB_CDC_REQ_GET_LINE_CODING_ALT: {
             struct usb_cdc_line_coding *coding;
             coding = (struct usb_cdc_line_coding*)(*buf);
 
